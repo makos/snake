@@ -1,6 +1,7 @@
 #include "game.h"
 #include "player.h"
 #include "apple.h"
+#include "utils.h"
 
 const short GREEN = 1;
 const short RED = 2;
@@ -12,6 +13,15 @@ const Vec_t DIR_RIGHT = {0, 1};
 const Vec_t DIR_DOWN = {1, 0};
 
 bool RUN = TRUE;
+
+WINDOW *create_win(int height, int width, int starty, int startx)
+{
+    WINDOW *local;
+    local = newwin(height, width, starty, startx);
+    box(local, 0, 0);
+    wrefresh(local);
+    return local;
+}
 
 void setup_colors()
 {
@@ -36,30 +46,23 @@ void game_setup()
     setup_colors();
 }
 
-void show_debug_info(Snake_t *player)
+void show_debug_info(Snake_t *player, WINDOW *win)
 {
-    int i = 2;
-    SnakePart_t *cur = player->head;
-    while (cur != NULL)
-    {
-        mvprintw(i, COLS - 20, "%i %i", cur->pos.y, cur->pos.x);
-        cur = cur->next;
-        i++;
-    }
-    //     mvprintw(1, COLS - 20, "Max: %i %i", LINES, COLS);
-    //     mvprintw(2, COLS - 20, "Player.pos: %i %i", player->pos.y, player->pos.x);
-    //     mvprintw(3, COLS - 20, "Player.facing: %i %i", player->facing.y, player->facing.x);
-    //     mvprintw(4, COLS - 20, "Move dir: %i %i", dir.y, dir.x);
-    //     // mvprintw(5, COLS - 20, "Clock: %i", (unsigned int)clock());
-    //     mvprintw(5, COLS - 20, "Tail length: %i", tail_len(player));
+    // mvwprintw(win, 1, 1, "Len: %i", snake_len(player));
+    // mvwprintw(win, 2, 1, "Pos: %i %i", player->head->pos.y, player->head->pos.x);
+    // mvwaddstr(win, 1, 1, "test");
+    // mvwaddstr(win, 2, 1, "another");
 }
 
 int main(int argc, char *argv[])
 {
     int ch; // For input.
+    //DEBUG STUFF
+    // WINDOW *debug_win = create_win(4, 4, 10, 10);
+    // WINDOW *debug_win = newwin(4, 4, 10, 10);
     game_setup();
 
-    Vec_t pos = {2, 5};
+    Vec_t pos = {LINES / 2, COLS / 2};
     Snake_t *player = new_snake(pos, '#');
 
     draw_snake(player);
@@ -67,27 +70,52 @@ int main(int argc, char *argv[])
     Apple_t *apple = new_random_apple();
     draw_apple(apple);
 
+    // wrefresh(debug_win);
     refresh();
 
     while (RUN)
     {
         clear();
-        ch = getch();
+        ch = wgetch(stdscr);
         move_snake(player, player->facing);
 
         switch (ch)
         {
         case KEY_LEFT:
-            move_snake(player, DIR_LEFT);
+            if (snake_len(player) == 0)
+            {
+                move_snake(player, DIR_LEFT);
+                break;
+            }
+            if (!is_eq(player->facing, DIR_RIGHT))
+                move_snake(player, DIR_LEFT);
             break;
         case KEY_RIGHT:
-            move_snake(player, DIR_RIGHT);
+            if (snake_len(player) == 0)
+            {
+                move_snake(player, DIR_RIGHT);
+                break;
+            }
+            if (!is_eq(player->facing, DIR_LEFT))
+                move_snake(player, DIR_RIGHT);
             break;
         case KEY_UP:
-            move_snake(player, DIR_UP);
+            if (snake_len(player) == 0)
+            {
+                move_snake(player, DIR_UP);
+                break;
+            }
+            if (!is_eq(player->facing, DIR_DOWN))
+                move_snake(player, DIR_UP);
             break;
         case KEY_DOWN:
-            move_snake(player, DIR_DOWN);
+            if (snake_len(player) == 0)
+            {
+                move_snake(player, DIR_DOWN);
+                break;
+            }
+            if (!is_eq(player->facing, DIR_UP))
+                move_snake(player, DIR_DOWN);
             break;
         case 'a':
             add_score(player);
@@ -99,7 +127,8 @@ int main(int argc, char *argv[])
 
         draw_snake(player);
 
-        if (player->head->pos.y == apple->pos.y && player->head->pos.x == apple->pos.x)
+        if (player->head->pos.y == apple->pos.y &&
+            player->head->pos.x == apple->pos.x)
         {
             eat_apple(apple);
             apple = new_random_apple();
@@ -108,13 +137,17 @@ int main(int argc, char *argv[])
 
         draw_apple(apple);
 
-        // show_debug_info(player);
+        box(stdscr, 0, 0);
 
+        // show_debug_info(player, debug_win);
+        // wprintw(debug_win, "test");
+
+        // wrefresh(debug_win);
         refresh();
         napms(50);
     }
 
-    curs_set(1);
+    // curs_set(1);
     endwin();
     return 0;
 }
