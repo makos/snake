@@ -7,5 +7,8 @@ LIBS=-l:pdcurses.a
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-curses: game.c game.h player.h player.c
+snake: game.c game.h player.h player.c
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+clean: 
+	rm -f *.exe
