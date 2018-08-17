@@ -10,7 +10,7 @@ bool RUN = TRUE;
 void setup_colors()
 {
     init_pair(GREEN, COLOR_GREEN, COLOR_BLACK);
-    init_pair(RED, COLOR_RED, COLOR_RED);
+    init_pair(RED, COLOR_RED, COLOR_BLACK);
 }
 
 void game_setup()
@@ -18,6 +18,7 @@ void game_setup()
     // Curses initializaiton & setup.
     initscr();
     cbreak();
+    noecho();
     keypad(stdscr, TRUE);
     if (has_colors())
     {
@@ -34,6 +35,8 @@ void show_debug_info(Player_t *player, Vec_t dir)
     mvprintw(2, COLS - 20, "Player.pos: %i %i", player->pos.y, player->pos.x);
     mvprintw(3, COLS - 20, "Player.facing: %i %i", player->facing.y, player->facing.x);
     mvprintw(4, COLS - 20, "Move dir: %i %i", dir.y, dir.x);
+    // mvprintw(5, COLS - 20, "Clock: %i", (unsigned int)clock());
+    mvprintw(5, COLS - 20, "Tail length: %i", tail_len(player));
 }
 
 int main(int argc, char *argv[])
@@ -45,7 +48,8 @@ int main(int argc, char *argv[])
     Player_t snake = {
         {5, 10}, // Vec(y,x) position
         {0, -1}, // Vec(y,x) facing direction (looking up by default)
-        '#'};    // char to print
+        '#',     // char to print
+        NULL};   // Tail_t *tail
     draw_player(&snake);
 
     Apple_t *apple = new_random_apple();
@@ -63,7 +67,6 @@ int main(int argc, char *argv[])
         switch (ch)
         {
         case KEY_LEFT:
-            mvprintw(5, COLS - 20, "moved left");
             dir.x = -1;
             move_player(&snake, dir);
             break;
@@ -79,16 +82,29 @@ int main(int argc, char *argv[])
             dir.y = 1;
             move_player(&snake, dir);
             break;
+        case 'a':
+            add_tail(&snake);
+            break;
         case 'q':
             RUN = FALSE;
             break;
         }
-        napms(250);
 
         draw_player(&snake);
+
+        if (snake.pos.x == apple->pos.x && snake.pos.y == apple->pos.y)
+        {
+            eat_apple(apple);
+            apple = new_random_apple();
+            add_tail(&snake);
+        }
+
         draw_apple(apple);
+
         show_debug_info(&snake, dir);
+
         refresh();
+        napms(50);
     }
 
     curs_set(1);
