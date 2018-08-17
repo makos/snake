@@ -6,7 +6,7 @@
 #include <time.h>
 
 // Colors
-const short RED, GREEN;
+const short RED, GREEN, YELLOW;
 bool RUN;
 
 typedef struct Vec

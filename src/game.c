@@ -4,6 +4,7 @@
 
 const short GREEN = 1;
 const short RED = 2;
+const short YELLOW = 3;
 
 const Vec_t DIR_LEFT = {0, -1};
 const Vec_t DIR_UP = {-1, 0};
@@ -16,6 +17,7 @@ void setup_colors()
 {
     init_pair(GREEN, COLOR_GREEN, COLOR_BLACK);
     init_pair(RED, COLOR_RED, COLOR_BLACK);
+    init_pair(YELLOW, COLOR_YELLOW, COLOR_BLACK);
 }
 
 void game_setup()
@@ -86,6 +88,9 @@ int main(int argc, char *argv[])
             break;
         case KEY_DOWN:
             move_snake(player, DIR_DOWN);
+            break;
+        case 'a':
+            add_score(player);
             break;
         case 'q':
             RUN = FALSE;

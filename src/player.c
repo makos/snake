@@ -38,8 +38,9 @@ void move_snake(Snake_t *self, Vec_t dir)
     }
 
     SnakePart_t *last = get_last(self);
-    push_part(self, new_pos);
+    push_part(self);
     delete_part(last);
+    self->head->pos = new_pos;
 }
 
 void draw_snake(Snake_t *self)
@@ -47,9 +48,18 @@ void draw_snake(Snake_t *self)
     SnakePart_t *current = self->head;
     while (current != NULL)
     {
-        attron(COLOR_PAIR(GREEN));
-        mvprintw(current->pos.y, current->pos.x, (char *)&self->ch);
-        attroff(COLOR_PAIR(GREEN));
+        if (current->prev == NULL)
+        {
+            attron(COLOR_PAIR(YELLOW));
+            mvprintw(current->pos.y, current->pos.x, (char *)&self->ch);
+            attroff(COLOR_PAIR(YELLOW));
+        }
+        else
+        {
+            attron(COLOR_PAIR(GREEN));
+            mvprintw(current->pos.y, current->pos.x, (char *)&self->ch);
+            attroff(COLOR_PAIR(GREEN));
+        }
         current = current->next;
     }
 }
@@ -90,10 +100,10 @@ void append_part(Snake_t *self)
 }
 
 /* Inserts new SnakePart at the beginning of snake. */
-void push_part(Snake_t *self, Vec_t pos)
+void push_part(Snake_t *self)
 {
     SnakePart_t *new_part = (SnakePart_t *)malloc(sizeof(SnakePart_t));
-    new_part->pos = pos;
+    new_part->pos = self->head->pos;
     // New part should point to the current head.
     new_part->next = self->head;
     // new_part is first so no previous part exists.
