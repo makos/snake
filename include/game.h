@@ -3,10 +3,16 @@
 
 #include <curses.h>
 #include <stdlib.h>
-// #include <time.h>
+#include <time.h>
 
+// Colors
 const short RED, GREEN;
 bool RUN;
+
+typedef struct Vec
+{
+    int y, x;
+} Vec_t;
 
 void setup_colors();
 void game_setup();

@@ -1,7 +1,7 @@
-#include "player.h"
 #include "game.h"
+#include "player.h"
 
-void move_player(Player *self, Vec dir)
+void move_player(Player_t *self, Vec_t dir)
 {
     int temp_y = self->pos.y + dir.y;
     int temp_x = self->pos.x + dir.x;
@@ -24,7 +24,7 @@ void move_player(Player *self, Vec dir)
     }
 }
 
-void draw_player(Player *self)
+void draw_player(Player_t *self)
 {
     attron(COLOR_PAIR(GREEN));
     mvprintw(self->pos.y, self->pos.x, &self->ch);

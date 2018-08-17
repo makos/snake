@@ -1,18 +1,15 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-
-typedef struct Vec
-{
-    int y, x;
-} Vec;
+// Needs "game.h"
+typedef struct Vec Vec_t;
 
 typedef struct Player
 {
-    Vec pos;
-    Vec facing;
+    Vec_t pos;
+    Vec_t facing;
     char ch;
-} Player;
+} Player_t;
 
-void move_player(Player *self, Vec dir);
-void draw_player(Player *self);
+void move_player(Player_t *self, Vec_t dir);
+void draw_player(Player_t *self);
 #endif //PLAYER_H
