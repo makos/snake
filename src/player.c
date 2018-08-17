@@ -1,6 +1,8 @@
 #include "game.h"
 #include "player.h"
 
+/* Allocate memory for a new snake.
+   Snakes always have a head that connects to the tail */
 Snake_t *new_snake(Vec_t pos, int ch)
 {
     SnakePart_t *head = (SnakePart_t *)malloc(sizeof(SnakePart_t));
@@ -31,7 +33,8 @@ void move_snake(Snake_t *self, Vec_t dir)
         self->head->pos.y + dir.y,
         self->head->pos.x + dir.x};
 
-    if (new_pos.y < 0 || new_pos.y >= LINES || new_pos.x < 0 || new_pos.x >= COLS)
+    if (new_pos.y < 0 || new_pos.y >= LINES ||
+        new_pos.x < 0 || new_pos.x >= COLS)
     {
         new_pos.y = self->head->pos.y;
         new_pos.x = self->head->pos.x;
@@ -64,11 +67,13 @@ void draw_snake(Snake_t *self)
     }
 }
 
+/* Add tail segment when apple is eaten. */
 void add_score(Snake_t *self)
 {
     append_part(self);
 }
 
+/* Find the last part of snake's tail. */
 SnakePart_t *get_last(Snake_t *snake)
 {
     SnakePart_t *last = snake->head;
@@ -77,6 +82,7 @@ SnakePart_t *get_last(Snake_t *snake)
     return last;
 }
 
+/* Delete snake's part. (ouch!) */
 void delete_part(SnakePart_t *part)
 {
     if (part->prev == NULL)

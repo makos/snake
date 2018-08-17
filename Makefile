@@ -9,10 +9,10 @@ ODIR=./src/obj
 
 CFLAGS=-I$(IDIR) -std=c11 -Wall
 
-_DEPS = game.h player.h apple.h
+_DEPS = game.h player.h apple.h utils.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = game.o player.o apple.o
+_OBJ = game.o player.o apple.o utils.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 LIBS=-l:pdcurses.a
