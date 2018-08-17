@@ -18,7 +18,7 @@ Apple_t *new_random_apple()
 void draw_apple(Apple_t *self)
 {
     attron(COLOR_PAIR(RED));
-    mvprintw(self->pos.y, self->pos.x, &self->ch);
+    mvprintw(self->pos.y, self->pos.x, (char *)&self->ch);
     attroff(COLOR_PAIR(RED));
 }
 

@@ -1,7 +1,7 @@
 #include "game.h"
 #include "player.h"
 
-Snake_t *new_snake(Vec_t pos)
+Snake_t *new_snake(Vec_t pos, int ch)
 {
     SnakePart_t *head = (SnakePart_t *)malloc(sizeof(SnakePart_t));
     head->next = NULL;
@@ -9,43 +9,106 @@ Snake_t *new_snake(Vec_t pos)
     head->pos = pos;
 
     Snake_t *snake = (Snake_t *)malloc(sizeof(Snake_t));
-    snake->parts = head;
+    snake->head = head;
+    snake->facing = DIR_UP;
+    snake->ch = ch;
 
     return snake;
 }
 
-/* Appends new SnakePart at the end. */
-void append_part(Snake_t *self, Vec_t pos)
+void move_snake(Snake_t *self, Vec_t dir)
 {
-    SnakePart_t *current = self->parts;
-    while (current->next != NULL)
+    if (dir.y == -1)
+        self->facing = DIR_UP;
+    else if (dir.x == 1)
+        self->facing = DIR_RIGHT;
+    else if (dir.y == 1)
+        self->facing = DIR_DOWN;
+    else if (dir.x == -1)
+        self->facing = DIR_LEFT;
+
+    Vec_t new_pos = {
+        self->head->pos.y + dir.y,
+        self->head->pos.x + dir.x};
+
+    if (new_pos.y < 0 || new_pos.y >= LINES || new_pos.x < 0 || new_pos.x >= COLS)
     {
+        new_pos.y = self->head->pos.y;
+        new_pos.x = self->head->pos.x;
+    }
+
+    SnakePart_t *last = get_last(self);
+    push_part(self, new_pos);
+    delete_part(last);
+}
+
+void draw_snake(Snake_t *self)
+{
+    SnakePart_t *current = self->head;
+    while (current != NULL)
+    {
+        attron(COLOR_PAIR(GREEN));
+        mvprintw(current->pos.y, current->pos.x, (char *)&self->ch);
+        attroff(COLOR_PAIR(GREEN));
         current = current->next;
     }
+}
+
+void add_score(Snake_t *self)
+{
+    append_part(self);
+}
+
+SnakePart_t *get_last(Snake_t *snake)
+{
+    SnakePart_t *last = snake->head;
+    while (last->next != NULL)
+        last = last->next;
+    return last;
+}
+
+void delete_part(SnakePart_t *part)
+{
+    if (part->prev == NULL)
+        return;
+    part->prev->next = NULL;
+    part->prev = NULL;
+    free(part);
+}
+
+/* Appends new SnakePart at the end. */
+void append_part(Snake_t *self)
+{
+    SnakePart_t *last = get_last(self);
     SnakePart_t *new_part = (SnakePart_t *)malloc(sizeof(SnakePart_t));
-    // Vec_t pos = {0, 0};
-    new_part->prev = current;
+
+    new_part->prev = last;
     new_part->next = NULL;
-    new_part->pos = pos;
-    current->next = new_part;
+    new_part->pos = last->pos;
+
+    last->next = new_part;
 }
 
 /* Inserts new SnakePart at the beginning of snake. */
 void push_part(Snake_t *self, Vec_t pos)
 {
     SnakePart_t *new_part = (SnakePart_t *)malloc(sizeof(SnakePart_t));
-    // Vec_t pos = {0, 0};
-    //TODO: fix this, new_part should be first in the list and now it is not
     new_part->pos = pos;
+    // New part should point to the current head.
+    new_part->next = self->head;
+    // new_part is first so no previous part exists.
     new_part->prev = NULL;
-    self->parts->prev = new_part;
-    new_part->next = self->parts;
-    self->parts = new_part;
+    // "Move" current head.
+    if (self->head != NULL)
+        self->head->prev = new_part;
+    // Make the new part actually the first part.
+    self->head = new_part;
 }
 
+/* Returns the length. */
 int snake_len(Snake_t *self)
 {
-    SnakePart_t *current = self->parts;
+    SnakePart_t *current = self->head;
     int count = 0;
     while (current->next != NULL)
     {

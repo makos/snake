@@ -6,7 +6,7 @@ typedef struct Vec Vec_t;
 typedef struct Apple
 {
     Vec_t pos;
-    char ch;
+    int ch;
 } Apple_t;
 
 Apple_t *new_random_apple();

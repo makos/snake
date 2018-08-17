@@ -5,6 +5,11 @@
 const short GREEN = 1;
 const short RED = 2;
 
+const Vec_t DIR_LEFT = {0, -1};
+const Vec_t DIR_UP = {-1, 0};
+const Vec_t DIR_RIGHT = {0, 1};
+const Vec_t DIR_DOWN = {1, 0};
+
 bool RUN = TRUE;
 
 void setup_colors()
@@ -29,21 +34,15 @@ void game_setup()
     setup_colors();
 }
 
-// void show_debug_info(Player_t *player, Vec_t dir)
 void show_debug_info(Snake_t *player)
 {
-    int n = snake_len(player);
     int i = 2;
-    mvprintw(1, COLS - 20, "Snake len: %i", n);
-    SnakePart_t *cur = player->parts;
-    if (cur->next != NULL)
+    SnakePart_t *cur = player->head;
+    while (cur != NULL)
     {
-        while (cur->next != NULL)
-        {
-            mvprintw(i, COLS - 20, "%i %i", cur->pos.y, cur->pos.x);
-            cur = cur->next;
-            i++;
-        }
+        mvprintw(i, COLS - 20, "%i %i", cur->pos.y, cur->pos.x);
+        cur = cur->next;
+        i++;
     }
     //     mvprintw(1, COLS - 20, "Max: %i %i", LINES, COLS);
     //     mvprintw(2, COLS - 20, "Player.pos: %i %i", player->pos.y, player->pos.x);
@@ -58,48 +57,53 @@ int main(int argc, char *argv[])
     int ch; // For input.
     game_setup();
 
-    Snake_t *player = new_snake();
-    Vec_t pos = {2, 0};
-    append_part(player, pos);
+    Vec_t pos = {2, 5};
+    Snake_t *player = new_snake(pos, '#');
 
-    // Apple_t *apple = new_random_apple();
-    // draw_apple(apple);
+    draw_snake(player);
+
+    Apple_t *apple = new_random_apple();
+    draw_apple(apple);
 
     refresh();
 
     while (RUN)
     {
-        ch = getch();
         clear();
+        ch = getch();
+        move_snake(player, player->facing);
 
-        // Vec_t dir = {0, 0};
-        Vec_t pos = {0, 0};
         switch (ch)
         {
-        // case KEY_LEFT:
-        //     break;
-        // case KEY_RIGHT:
-        //     break;
-        // case KEY_UP:
-        //     break;
-        // case KEY_DOWN:
-        //     break;
-        case 'a':
-            pos.y = 1;
-            append_part(player, pos);
+        case KEY_LEFT:
+            move_snake(player, DIR_LEFT);
             break;
-        case 'p':
-            pos.x = 1;
-            push_part(player, pos);
+        case KEY_RIGHT:
+            move_snake(player, DIR_RIGHT);
+            break;
+        case KEY_UP:
+            move_snake(player, DIR_UP);
+            break;
+        case KEY_DOWN:
+            move_snake(player, DIR_DOWN);
             break;
         case 'q':
             RUN = FALSE;
             break;
         }
 
-        // draw_apple(apple);
+        draw_snake(player);
 
-        show_debug_info(player);
+        if (player->head->pos.y == apple->pos.y && player->head->pos.x == apple->pos.x)
+        {
+            eat_apple(apple);
+            apple = new_random_apple();
+            add_score(player);
+        }
+
+        draw_apple(apple);
+
+        // show_debug_info(player);
 
         refresh();
         napms(50);
