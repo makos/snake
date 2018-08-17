@@ -14,9 +14,9 @@ typedef struct Vec
     int y, x;
 } Vec_t;
 
-void setup_colors();
-void game_setup();
-void show_debug_info();
-int main(int argc, char *argv[]);
+// void setup_colors();
+// void game_setup();
+// void show_debug_info();
+// int main(int argc, char *argv[]);
 
 #endif //GAME_H

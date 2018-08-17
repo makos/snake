@@ -2,24 +2,23 @@
 #define PLAYER_H
 // Needs "game.h"
 typedef struct Vec Vec_t;
-typedef struct Tail Tail_t;
+typedef struct SnakePart SnakePart_t;
 
-typedef struct Tail
+typedef struct SnakePart
 {
+    SnakePart_t *prev;
     Vec_t pos;
-    Tail_t *next;
-} Tail_t;
+    SnakePart_t *next;
+} SnakePart_t;
 
-typedef struct Player
+typedef struct Snake
 {
-    Vec_t pos;
-    Vec_t facing;
-    char ch;
-    Tail_t *tail;
-} Player_t;
+    SnakePart_t *parts;
+} Snake_t;
 
-void move_player(Player_t *self, Vec_t dir);
-void draw_player(Player_t *self);
-void add_tail(Player_t *self);
-int tail_len(Player_t *player);
+Snake_t *new_snake();
+void append_part(Snake_t *self, Vec_t pos);
+void push_part(Snake_t *self, Vec_t pos);
+int snake_len(Snake_t *self);
+
 #endif //PLAYER_H

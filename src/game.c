@@ -29,14 +29,28 @@ void game_setup()
     setup_colors();
 }
 
-void show_debug_info(Player_t *player, Vec_t dir)
+// void show_debug_info(Player_t *player, Vec_t dir)
+void show_debug_info(Snake_t *player)
 {
-    mvprintw(1, COLS - 20, "Max: %i %i", LINES, COLS);
-    mvprintw(2, COLS - 20, "Player.pos: %i %i", player->pos.y, player->pos.x);
-    mvprintw(3, COLS - 20, "Player.facing: %i %i", player->facing.y, player->facing.x);
-    mvprintw(4, COLS - 20, "Move dir: %i %i", dir.y, dir.x);
-    // mvprintw(5, COLS - 20, "Clock: %i", (unsigned int)clock());
-    mvprintw(5, COLS - 20, "Tail length: %i", tail_len(player));
+    int n = snake_len(player);
+    int i = 2;
+    mvprintw(1, COLS - 20, "Snake len: %i", n);
+    SnakePart_t *cur = player->parts;
+    if (cur->next != NULL)
+    {
+        while (cur->next != NULL)
+        {
+            mvprintw(i, COLS - 20, "%i %i", cur->pos.y, cur->pos.x);
+            cur = cur->next;
+            i++;
+        }
+    }
+    //     mvprintw(1, COLS - 20, "Max: %i %i", LINES, COLS);
+    //     mvprintw(2, COLS - 20, "Player.pos: %i %i", player->pos.y, player->pos.x);
+    //     mvprintw(3, COLS - 20, "Player.facing: %i %i", player->facing.y, player->facing.x);
+    //     mvprintw(4, COLS - 20, "Move dir: %i %i", dir.y, dir.x);
+    //     // mvprintw(5, COLS - 20, "Clock: %i", (unsigned int)clock());
+    //     mvprintw(5, COLS - 20, "Tail length: %i", tail_len(player));
 }
 
 int main(int argc, char *argv[])
@@ -44,16 +58,12 @@ int main(int argc, char *argv[])
     int ch; // For input.
     game_setup();
 
-    // Set up player and the first apple.
-    Player_t snake = {
-        {5, 10}, // Vec(y,x) position
-        {0, -1}, // Vec(y,x) facing direction (looking up by default)
-        '#',     // char to print
-        NULL};   // Tail_t *tail
-    draw_player(&snake);
+    Snake_t *player = new_snake();
+    Vec_t pos = {2, 0};
+    append_part(player, pos);
 
-    Apple_t *apple = new_random_apple();
-    draw_apple(apple);
+    // Apple_t *apple = new_random_apple();
+    // draw_apple(apple);
 
     refresh();
 
@@ -61,47 +71,35 @@ int main(int argc, char *argv[])
     {
         ch = getch();
         clear();
-        move_player(&snake, snake.facing);
 
-        Vec_t dir = {0, 0};
+        // Vec_t dir = {0, 0};
+        Vec_t pos = {0, 0};
         switch (ch)
         {
-        case KEY_LEFT:
-            dir.x = -1;
-            move_player(&snake, dir);
-            break;
-        case KEY_RIGHT:
-            dir.x = 1;
-            move_player(&snake, dir);
-            break;
-        case KEY_UP:
-            dir.y = -1;
-            move_player(&snake, dir);
-            break;
-        case KEY_DOWN:
-            dir.y = 1;
-            move_player(&snake, dir);
-            break;
+        // case KEY_LEFT:
+        //     break;
+        // case KEY_RIGHT:
+        //     break;
+        // case KEY_UP:
+        //     break;
+        // case KEY_DOWN:
+        //     break;
         case 'a':
-            add_tail(&snake);
+            pos.y = 1;
+            append_part(player, pos);
+            break;
+        case 'p':
+            pos.x = 1;
+            push_part(player, pos);
             break;
         case 'q':
             RUN = FALSE;
             break;
         }
 
-        draw_player(&snake);
+        // draw_apple(apple);
 
-        if (snake.pos.x == apple->pos.x && snake.pos.y == apple->pos.y)
-        {
-            eat_apple(apple);
-            apple = new_random_apple();
-            add_tail(&snake);
-        }
-
-        draw_apple(apple);
-
-        show_debug_info(&snake, dir);
+        show_debug_info(player);
 
         refresh();
         napms(50);
