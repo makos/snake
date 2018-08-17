@@ -3,6 +3,7 @@
 
 Apple_t *new_random_apple()
 {
+    // Initialize the RNG with current CPU clock time
     srand((unsigned int)clock());
     int rand_y = rand() % LINES;
     int rand_x = rand() % COLS;
