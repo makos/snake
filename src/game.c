@@ -106,12 +106,17 @@ void debug_info(WINDOW *win, Snake_t *player)
 
 void check_valid_move(Snake_t *player, Vec_t dir)
 {
+    // If the snake doesn't have a tail, allow movement in any direction.
+    // The second check is to disallow players from adding velocity by holding
+    // an arrow button while moving in the same direction.
     if (snake_len(player) == 0 && !is_eq(player->facing, dir))
     {
         move_snake(player, dir);
     }
     else
     {
+        // Second check prevents the player from turning inside themselves,
+        // first is like the second one above.
         if (!is_eq(player->facing, dir) &&
             !is_eq(player->facing, reverse_dir(dir)))
             move_snake(player, dir);
@@ -140,6 +145,8 @@ void handle_input(Snake_t *player, int ch)
     case 'R':
         reset_game(player);
         break;
+    default:
+        move_snake(player, player->facing);
     }
 }
 
@@ -163,14 +170,9 @@ int main(int argc, char *argv[])
         ch = wgetch(MAIN_WIN);
 
         werase(MAIN_WIN);
+        werase(dbg_win);
 
         handle_input(player, ch);
-
-        move_snake(player, player->facing);
-
-        box(MAIN_WIN, 0, 0);
-
-        draw_snake(player);
 
         if (is_eq(player->head->pos, APPLE->pos))
         {
@@ -178,6 +180,13 @@ int main(int argc, char *argv[])
             APPLE = new_random_apple();
             add_score(player);
         }
+
+        // move_snake(player, player->facing);
+        // check_valid_move(player, player->facing);
+
+        box(MAIN_WIN, 0, 0);
+
+        draw_snake(player);
 
         draw_apple(APPLE);
 
