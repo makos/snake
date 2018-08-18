@@ -10,7 +10,7 @@ Apple_t *new_random_apple()
     // int rand_y = rand() % LINES;
     // int rand_x = rand() % COLS;
     Apple_t *apple = (Apple_t *)malloc(sizeof(Apple_t));
-    apple->pos = random_vec();
+    apple->pos = random_vec(MAXY - 1, MAXX - 1);
     // apple->pos.y = rand_y;
     // apple->pos.x = rand_x;
     apple->ch = '@';

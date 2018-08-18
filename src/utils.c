@@ -8,12 +8,18 @@ int is_eq(Vec_t dir, Vec_t other)
 }
 
 //TODO: Make this actually RNG
-Vec_t random_vec()
+Vec_t random_vec(int maxy, int maxx)
 {
     time_t tt;
     srand((time(&tt) * 377) % 23);
-    int rand_y = rand() % LINES;
-    int rand_x = rand() % COLS;
+    int rand_y = rand() % maxy;
+    int rand_x = rand() % maxx;
     Vec_t vec = {rand_y, rand_x};
     return vec;
+}
+
+Vec_t reverse_dir(Vec_t dir)
+{
+    Vec_t temp = {-dir.y, -dir.x};
+    return temp;
 }
