@@ -1,6 +1,10 @@
 #ifndef UTILS_H
 #define UTILS_H
-typedef struct Vec Vec_t;
+
+typedef struct Vec
+{
+    int y, x;
+} Vec_t;
 
 int dir_is_eq(Vec_t dir, Vec_t other);
 Vec_t random_vec(int maxy, int maxx);

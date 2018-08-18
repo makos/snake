@@ -8,9 +8,9 @@
  * The Snake also has a Vec_t facing field which tells us which way the player
  * is facing, so we can move the snake one cell every frame.
  */
+#include "utils.h"
 #include "game.h"
 #include "player.h"
-#include "utils.h"
 
 /* Allocate memory for a new snake.
    Snakes always have a head that connects to the tail */
@@ -32,13 +32,13 @@ Snake_t *new_snake(Vec_t pos, int ch)
 void move_snake(Snake_t *self, Vec_t dir)
 {
     // Change facing direction accordingly.
-    if (is_eq(dir, DIR_UP))
+    if (dir_is_eq(dir, DIR_UP))
         self->facing = DIR_UP;
-    else if (is_eq(dir, DIR_RIGHT))
+    else if (dir_is_eq(dir, DIR_RIGHT))
         self->facing = DIR_RIGHT;
-    else if (is_eq(dir, DIR_DOWN))
+    else if (dir_is_eq(dir, DIR_DOWN))
         self->facing = DIR_DOWN;
-    else if (is_eq(dir, DIR_LEFT))
+    else if (dir_is_eq(dir, DIR_LEFT))
         self->facing = DIR_LEFT;
 
     Vec_t new_pos = {
@@ -51,7 +51,7 @@ void move_snake(Snake_t *self, Vec_t dir)
         SnakePart_t *current = self->head->next;
         while (current->next != NULL)
         {
-            if (is_eq(self->head->pos, current->pos))
+            if (dir_is_eq(self->head->pos, current->pos))
                 game_over(self);
             current = current->next;
         }

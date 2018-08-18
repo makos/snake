@@ -4,9 +4,9 @@
  * Apple is as simple as it gets. It holds position data and the character it
  * should be printed as. It has basic drawing, creating and freeing functions.
  */
+#include "utils.h"
 #include "game.h"
 #include "apple.h"
-#include "utils.h"
 
 // Spawn a new apple at a random position.
 Apple_t *new_random_apple()

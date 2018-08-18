@@ -9,11 +9,7 @@
 const short RED, GREEN, YELLOW;
 bool RUN;
 
-typedef struct Vec
-{
-    int y, x;
-} Vec_t;
-
+typedef struct Vec Vec_t;
 typedef struct Snake Snake_t;
 typedef struct Apple Apple_t;
 

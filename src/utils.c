@@ -1,8 +1,8 @@
 /* 
  * utils.c - utility functions used in various places.
  */
-#include "game.h"
 #include "utils.h"
+#include "game.h"
 
 /* Tests equality between two Vec_t points. */
 int dir_is_eq(Vec_t dir, Vec_t other)

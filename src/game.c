@@ -1,7 +1,7 @@
+#include "utils.h"
 #include "game.h"
 #include "player.h"
 #include "apple.h"
-#include "utils.h"
 
 const short GREEN = 1;
 const short RED = 2;
