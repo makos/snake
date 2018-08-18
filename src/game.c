@@ -21,15 +21,20 @@ void reset_game(Snake_t *player)
     player->head->pos = random_vec(MAXY - 1, MAXX - 1);
     eat_apple(APPLE);
     APPLE = new_random_apple();
+    wclear(MAIN_WIN);
+    draw_snake(player);
+    draw_apple(APPLE);
+    wrefresh(MAIN_WIN);
+    new_game_prompt();
 }
 
 void game_over(Snake_t *player)
 {
+    nodelay(MAIN_WIN, FALSE);
     char ch;
     int loop = TRUE;
     mvwprintw(MAIN_WIN, 1, 1, "Game Over");
     mvwprintw(MAIN_WIN, 2, 1, "Press Q to quit and R to restart");
-    nodelay(MAIN_WIN, FALSE);
 
     while (loop)
     {
@@ -42,7 +47,7 @@ void game_over(Snake_t *player)
             break;
         case 'R':
             loop = FALSE;
-            nodelay(MAIN_WIN, TRUE);
+            // nodelay(MAIN_WIN, TRUE);
             reset_game(player);
             break;
         }
@@ -141,11 +146,13 @@ void handle_input(Snake_t *player, int ch)
 
 void new_game_prompt()
 {
+    int ch;
     nodelay(MAIN_WIN, FALSE);
     mvwprintw(MAIN_WIN, 1, 1, "Press any key to start...");
     wrefresh(MAIN_WIN);
-    wgetch(MAIN_WIN);
+    ch = wgetch(MAIN_WIN);
     nodelay(MAIN_WIN, TRUE);
+    ungetch(ch);
 }
 
 int main(int argc, char *argv[])

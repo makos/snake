@@ -32,5 +32,6 @@ const Vec_t DIR_DOWN;
 
 void reset_game(Snake_t *player);
 void game_over(Snake_t *player);
+void new_game_prompt();
 
 #endif //GAME_H
