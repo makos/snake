@@ -10,7 +10,6 @@ int is_eq(Vec_t dir, Vec_t other)
     return dir.y == other.y && dir.x == other.x;
 }
 
-//TODO: Make this actually RNG
 Vec_t random_vec(int maxy, int maxx)
 {
     // time_t tt;
