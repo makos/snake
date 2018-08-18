@@ -1,6 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-// Needs "game.h" "player.h" "curses.h"
+// Needs "game.h" "curses.h"
 typedef struct Vec Vec_t;
 typedef struct SnakePart SnakePart_t;
 typedef struct _win WINDOW;
