@@ -18,6 +18,7 @@ void reset_game(Snake_t *player)
 {
     player->head->next = NULL;
     player->head->pos = random_vec(MAXY - 1, MAXX - 1);
+    player->score = 0;
     eat_apple(APPLE);
     APPLE = new_random_apple(player);
     wclear(MAIN_WIN);
@@ -166,6 +167,8 @@ int main(int argc, char *argv[])
     game_setup();
     //DEBUG: remove later
     // WINDOW *dbg_win = newwin(5, 20, 5, 30);
+    WINDOW *score_win = newwin(1, 10, 0, 0);
+    mvwprintw(score_win, 0, 0, "Score:");
 
     // Initialize the player.
     Snake_t *player = new_snake(random_vec(MAXY - 1, MAXX - 1), '#');
@@ -176,6 +179,7 @@ int main(int argc, char *argv[])
     draw_apple(APPLE);
 
     new_game_prompt();
+    wrefresh(score_win);
     //DEBUG:
     // wrefresh(dbg_win);
 
@@ -184,6 +188,7 @@ int main(int argc, char *argv[])
     {
         ch = wgetch(MAIN_WIN);
 
+        werase(score_win);
         werase(MAIN_WIN);
         //DEBUG:
         // werase(dbg_win);
@@ -198,16 +203,17 @@ int main(int argc, char *argv[])
             add_score(player);
         }
 
-        box(MAIN_WIN, 0, 0);
-
         draw_snake(player);
 
         draw_apple(APPLE);
 
+        mvwprintw(score_win, 0, 0, "Score: %i", player->score);
         //DEBUG:
         // debug_info(dbg_win, player);
 
+        box(MAIN_WIN, 0, 0);
         wrefresh(MAIN_WIN);
+        wrefresh(score_win);
         //DEBUG:
         // wrefresh(dbg_win);
 

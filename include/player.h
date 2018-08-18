@@ -17,6 +17,7 @@ typedef struct Snake
     SnakePart_t *head;
     Vec_t facing;
     int ch;
+    int score;
 } Snake_t;
 
 Snake_t *new_snake(Vec_t pos, int ch);

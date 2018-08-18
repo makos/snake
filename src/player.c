@@ -25,6 +25,7 @@ Snake_t *new_snake(Vec_t pos, int ch)
     snake->head = head;
     snake->facing = DIR_UP;
     snake->ch = ch;
+    snake->score = 0;
 
     return snake;
 }
@@ -94,9 +95,10 @@ void draw_snake(Snake_t *self)
     }
 }
 
-// Add tail segment when apple is eaten.
+// Add tail segment and a point when apple is eaten.
 void add_score(Snake_t *self)
 {
+    self->score++;
     append_part(self);
 }
 
