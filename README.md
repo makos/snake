@@ -17,8 +17,8 @@ Other requirements:
 Pre-compiled binaries are planned. For now you have to compile from source (which is dead-easy once you have the required tools).
 
 ````
-git clone <this repo>
-cd <this repo>
+git clone https://github.com/makos/snake.git
+cd snake
 make release && make run_release
 ````
 
