@@ -79,6 +79,10 @@ void game_setup()
     nodelay(MAIN_WIN, TRUE);
     curs_set(0);
     setup_colors();
+
+    // Random seed.
+    time_t tt;
+    srand((time(&tt)));
 }
 
 //DEBUG:
