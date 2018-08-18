@@ -46,6 +46,7 @@ void game_over(Snake_t *player)
             endwin();
             exit(0);
             break;
+        case 'r':
         case 'R':
             loop = FALSE;
             // nodelay(MAIN_WIN, TRUE);
@@ -53,6 +54,20 @@ void game_over(Snake_t *player)
             break;
         }
     }
+}
+
+void new_game_prompt()
+{
+    int ch;
+    nodelay(MAIN_WIN, FALSE);
+    mvwprintw(MAIN_WIN, 1, 1, "Press any key to start...");
+    wrefresh(MAIN_WIN);
+    // The following calls to wgetch() and ungetch() grab a key the user presses,
+    // and if it's an arrow key it gets processed in the main loop, so the
+    // snake immediately starts moving in the selected direction.
+    ch = wgetch(MAIN_WIN);
+    nodelay(MAIN_WIN, TRUE);
+    ungetch(ch);
 }
 
 void setup_colors()
@@ -68,7 +83,7 @@ void game_setup()
     initscr();
     refresh();
 
-    MAIN_WIN = newwin(10, 20, 5, 5);
+    MAIN_WIN = newwin(10, 20, 1, 1);
     // Get position and size of the window.
     getbegyx(MAIN_WIN, POSY, POSX);
     getmaxyx(MAIN_WIN, MAXY, MAXX);
@@ -145,23 +160,12 @@ void handle_input(Snake_t *player, int ch)
     }
 }
 
-void new_game_prompt()
-{
-    int ch;
-    nodelay(MAIN_WIN, FALSE);
-    mvwprintw(MAIN_WIN, 1, 1, "Press any key to start...");
-    wrefresh(MAIN_WIN);
-    ch = wgetch(MAIN_WIN);
-    nodelay(MAIN_WIN, TRUE);
-    ungetch(ch);
-}
-
 int main(int argc, char *argv[])
 {
     int ch; // For input.
     game_setup();
     //DEBUG: remove later
-    WINDOW *dbg_win = newwin(5, 20, 5, 30);
+    // WINDOW *dbg_win = newwin(5, 20, 5, 30);
 
     // Initialize the player.
     Snake_t *player = new_snake(random_vec(MAXY - 1, MAXX - 1), '#');
@@ -173,15 +177,16 @@ int main(int argc, char *argv[])
 
     new_game_prompt();
     //DEBUG:
-    wrefresh(dbg_win);
+    // wrefresh(dbg_win);
 
+    // Main loop.
     while (RUN)
     {
         ch = wgetch(MAIN_WIN);
 
         werase(MAIN_WIN);
         //DEBUG:
-        werase(dbg_win);
+        // werase(dbg_win);
 
         handle_input(player, ch);
 
@@ -200,11 +205,11 @@ int main(int argc, char *argv[])
         draw_apple(APPLE);
 
         //DEBUG:
-        debug_info(dbg_win, player);
+        // debug_info(dbg_win, player);
 
         wrefresh(MAIN_WIN);
         //DEBUG:
-        wrefresh(dbg_win);
+        // wrefresh(dbg_win);
 
         napms(100);
     }
