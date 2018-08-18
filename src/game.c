@@ -161,9 +161,33 @@ void handle_input(Snake_t *player, int ch)
     }
 }
 
+void set_defaults()
+{
+    SPEED = 125;
+}
+
+void parse_args(int argc, char *argv[])
+{
+    int num = atoi(argv[1]);
+    if (num != 0)
+    {
+        SPEED = num;
+    }
+    else
+    {
+        set_defaults();
+    }
+}
+
 int main(int argc, char *argv[])
 {
     int ch; // For input.
+
+    if (argc > 1)
+        parse_args(argc, argv);
+    else
+        set_defaults();
+
     game_setup();
     //DEBUG: remove later
     // WINDOW *dbg_win = newwin(5, 20, 5, 30);
@@ -217,7 +241,7 @@ int main(int argc, char *argv[])
         //DEBUG:
         // wrefresh(dbg_win);
 
-        napms(100);
+        napms(SPEED);
     }
 
     endwin();
