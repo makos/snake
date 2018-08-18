@@ -1,3 +1,13 @@
+/* 
+ * player.c - player (snake) structure and related functions.
+ * 
+ * The Snake is represented as a structure that is made out of SnakeParts.
+ * This is essentialy a doubly linked list. It supports rudimentary operations
+ * such as pushing, appending and deleting.
+ * 
+ * The Snake also has a Vec_t facing field which tells us which way the player
+ * is facing, so we can move the snake one cell every frame.
+ */
 #include "game.h"
 #include "player.h"
 #include "utils.h"
@@ -85,13 +95,13 @@ void draw_snake(Snake_t *self)
     }
 }
 
-/* Add tail segment when apple is eaten. */
+// Add tail segment when apple is eaten.
 void add_score(Snake_t *self)
 {
     append_part(self);
 }
 
-/* Find the last part of snake's tail. */
+// Find the last part of snake's tail.
 SnakePart_t *get_last(Snake_t *snake)
 {
     SnakePart_t *last = snake->head;
@@ -100,7 +110,7 @@ SnakePart_t *get_last(Snake_t *snake)
     return last;
 }
 
-/* Delete snake's part. (ouch!) */
+// Delete snake's part. (ouch!)
 void delete_part(SnakePart_t *part)
 {
     if (part->prev == NULL)
@@ -110,7 +120,7 @@ void delete_part(SnakePart_t *part)
     free(part);
 }
 
-/* Appends new SnakePart at the end. */
+// Appends new SnakePart at the end.
 void append_part(Snake_t *self)
 {
     SnakePart_t *last = get_last(self);
@@ -123,7 +133,7 @@ void append_part(Snake_t *self)
     last->next = new_part;
 }
 
-/* Inserts new SnakePart at the beginning of snake. */
+// Inserts new SnakePart at the beginning of snake.
 void push_part(Snake_t *self)
 {
     SnakePart_t *new_part = (SnakePart_t *)malloc(sizeof(SnakePart_t));
@@ -139,7 +149,7 @@ void push_part(Snake_t *self)
     self->head = new_part;
 }
 
-/* Returns the length. */
+// Returns the length of snake.
 int snake_len(Snake_t *self)
 {
     SnakePart_t *current = self->head;

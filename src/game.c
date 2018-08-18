@@ -13,25 +13,10 @@ const Vec_t DIR_RIGHT = {0, 1};
 const Vec_t DIR_DOWN = {1, 0};
 
 bool RUN = TRUE;
-// Apple_t *APPLE;
-// WINDOW *MAIN_WIN;
-
-// Creating a new window segfaults, WHY??
-// WINDOW *create_win(int height, int width, int starty, int startx)
-// {
-//     WINDOW *local;
-//     local = newwin(height, width, starty, startx);
-//     // local = subwin(stdscr, height, width, starty, startx);
-//     box(local, 0, 0);
-//     // wnoutrefresh(local);
-//     wrefresh(local);
-//     return local;
-// }
 
 void reset_game(Snake_t *player)
 {
     player->head->next = NULL;
-    // Vec_t pos = {10, 10};
     player->head->pos = random_vec(MAXY - 1, MAXX - 1);
     eat_apple(APPLE);
     APPLE = new_random_apple();
@@ -51,12 +36,10 @@ void game_over(Snake_t *player)
         ch = wgetch(MAIN_WIN);
         switch (ch)
         {
-        // case 'q':
         case 'Q':
             loop = FALSE;
             RUN = FALSE;
             break;
-        // case 'r':
         case 'R':
             loop = FALSE;
             nodelay(MAIN_WIN, TRUE);
@@ -180,9 +163,6 @@ int main(int argc, char *argv[])
             APPLE = new_random_apple();
             add_score(player);
         }
-
-        // move_snake(player, player->facing);
-        // check_valid_move(player, player->facing);
 
         box(MAIN_WIN, 0, 0);
 

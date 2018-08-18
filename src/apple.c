@@ -1,22 +1,23 @@
+/*
+ * apple.c - Apple data structure and related functions.
+ * 
+ * Apple is as simple as it gets. It holds position data and the character it
+ * should be printed as. It has basic drawing, creating and freeing functions.
+ */
 #include "game.h"
 #include "apple.h"
 #include "utils.h"
 
+// Spawn a new apple at a random position.
 Apple_t *new_random_apple()
 {
-    // Initialize the RNG with current CPU clock time
-    // time_t tt;
-    // srand(time(&tt));
-    // int rand_y = rand() % LINES;
-    // int rand_x = rand() % COLS;
     Apple_t *apple = (Apple_t *)malloc(sizeof(Apple_t));
     apple->pos = random_vec(MAXY - 1, MAXX - 1);
-    // apple->pos.y = rand_y;
-    // apple->pos.x = rand_x;
     apple->ch = '@';
     return apple;
 }
 
+// Draw the apple.
 void draw_apple(Apple_t *self)
 {
     wattron(MAIN_WIN, COLOR_PAIR(RED));
@@ -24,6 +25,7 @@ void draw_apple(Apple_t *self)
     wattroff(MAIN_WIN, COLOR_PAIR(RED));
 }
 
+// "Eat" the apple, freeing memory.
 void eat_apple(Apple_t *self)
 {
     free(self);

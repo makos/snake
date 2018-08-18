@@ -1,3 +1,6 @@
+/* 
+ * utils.c - utility functions used in various places.
+ */
 #include "game.h"
 #include "utils.h"
 
@@ -22,6 +25,7 @@ Vec_t random_vec(int maxy, int maxx)
     return vec;
 }
 
+// Reverses the given direction.
 Vec_t reverse_dir(Vec_t dir)
 {
     Vec_t temp = {-dir.y, -dir.x};
