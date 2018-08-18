@@ -5,7 +5,7 @@
 #include "utils.h"
 
 /* Tests equality between two Vec_t points. */
-int is_eq(Vec_t dir, Vec_t other)
+int dir_is_eq(Vec_t dir, Vec_t other)
 {
     return dir.y == other.y && dir.x == other.x;
 }

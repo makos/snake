@@ -102,7 +102,7 @@ void check_valid_move(Snake_t *player, Vec_t dir)
     // If the snake doesn't have a tail, allow movement in any direction.
     // The second check is to disallow players from adding velocity by holding
     // an arrow button while moving in the same direction.
-    if (snake_len(player) == 0 && !is_eq(player->facing, dir))
+    if (snake_len(player) == 0 && !dir_is_eq(player->facing, dir))
     {
         move_snake(player, dir);
     }
@@ -110,8 +110,8 @@ void check_valid_move(Snake_t *player, Vec_t dir)
     {
         // Second check prevents the player from turning inside themselves,
         // first is like the second one above.
-        if (!is_eq(player->facing, dir) &&
-            !is_eq(player->facing, reverse_dir(dir)))
+        if (!dir_is_eq(player->facing, dir) &&
+            !dir_is_eq(player->facing, reverse_dir(dir)))
             move_snake(player, dir);
     }
 }
@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
         handle_input(player, ch);
 
         // Check if player has collided with the apple.
-        if (is_eq(player->head->pos, APPLE->pos))
+        if (dir_is_eq(player->head->pos, APPLE->pos))
         {
             eat_apple(APPLE);
             APPLE = new_random_apple();
