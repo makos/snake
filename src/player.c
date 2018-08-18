@@ -62,6 +62,7 @@ void move_snake(Snake_t *self, Vec_t dir)
         new_pos.x < 1 || new_pos.x >= MAXX - 1)
     {
         game_over(self);
+        return;
     }
 
     // "Caterpillar-like" movement behavior (peristaltic).
