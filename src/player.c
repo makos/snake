@@ -52,8 +52,10 @@ void move_snake(Snake_t *self, Vec_t dir)
     }
 
     // Stop at the edges
-    if (new_pos.y < 0 || new_pos.y >= LINES ||
-        new_pos.x < 0 || new_pos.x >= COLS)
+    // if (new_pos.y < 0 || new_pos.y >= LINES ||
+    //     new_pos.x < 0 || new_pos.x >= COLS)
+    if (new_pos.y < 1 || new_pos.y >= MAXY ||
+        new_pos.x < 1 || new_pos.x >= MAXX)
     {
         new_pos.y = self->head->pos.y;
         new_pos.x = self->head->pos.x;

@@ -13,20 +13,20 @@ const Vec_t DIR_RIGHT = {0, 1};
 const Vec_t DIR_DOWN = {1, 0};
 
 bool RUN = TRUE;
-Apple_t *APPLE;
-WINDOW *MAIN_WIN;
+// Apple_t *APPLE;
+// WINDOW *MAIN_WIN;
 
 // Creating a new window segfaults, WHY??
-WINDOW *create_win(int height, int width, int starty, int startx)
-{
-    WINDOW *local;
-    local = newwin(height, width, starty, startx);
-    // local = subwin(stdscr, height, width, starty, startx);
-    box(local, 0, 0);
-    // wnoutrefresh(local);
-    wrefresh(local);
-    return local;
-}
+// WINDOW *create_win(int height, int width, int starty, int startx)
+// {
+//     WINDOW *local;
+//     local = newwin(height, width, starty, startx);
+//     // local = subwin(stdscr, height, width, starty, startx);
+//     box(local, 0, 0);
+//     // wnoutrefresh(local);
+//     wrefresh(local);
+//     return local;
+// }
 
 void reset_game(Snake_t *player)
 {
@@ -77,7 +77,11 @@ void game_setup()
 {
     // Curses initializaiton & setup.
     initscr();
-    MAIN_WIN = newwin(5, 100, 0, 0);
+    refresh();
+    // MAIN_WIN = newwin(0, 0, 0, 0);
+    MAIN_WIN = newwin(10, 20, 5, 5);
+    getbegyx(MAIN_WIN, POSY, POSX);
+    getmaxyx(MAIN_WIN, MAXY, MAXX);
     cbreak();
     noecho();
     keypad(MAIN_WIN, TRUE);
@@ -85,9 +89,12 @@ void game_setup()
     {
         start_color();
     }
-    nodelay(MAIN_WIN, TRUE);
+    // nodelay(stdscr, TRUE);
+    // nodelay(MAIN_WIN, TRUE);
     curs_set(0);
-    box(MAIN_WIN, 0, 0);
+    // box(MAIN_WIN, 0, 0);
+    wborder(MAIN_WIN, '|', '|', '-', '-', '+', '+', '+', '+');
+    wrefresh(MAIN_WIN);
     setup_colors();
 }
 
@@ -96,84 +103,93 @@ void debug_info(WINDOW *win, Snake_t *player)
     mvwprintw(win, 1, 1, "test");
 }
 
+void handle_input(Snake_t *player, int ch)
+{
+    switch (ch)
+    {
+    case KEY_LEFT:
+        if (snake_len(player) == 0 && !is_eq(player->facing, DIR_LEFT))
+        {
+            move_snake(player, DIR_LEFT);
+            break;
+        }
+        if (!is_eq(player->facing, DIR_RIGHT) &&
+            !is_eq(player->facing, DIR_LEFT))
+            move_snake(player, DIR_LEFT);
+        break;
+    case KEY_RIGHT:
+        if (snake_len(player) == 0 && !is_eq(player->facing, DIR_RIGHT))
+        {
+            move_snake(player, DIR_RIGHT);
+            break;
+        }
+        if (!is_eq(player->facing, DIR_LEFT) &&
+            !is_eq(player->facing, DIR_RIGHT))
+            move_snake(player, DIR_RIGHT);
+        break;
+    case KEY_UP:
+        if (snake_len(player) == 0 && !is_eq(player->facing, DIR_UP))
+        {
+            move_snake(player, DIR_UP);
+            break;
+        }
+        if (!is_eq(player->facing, DIR_DOWN) &&
+            !is_eq(player->facing, DIR_UP))
+            move_snake(player, DIR_UP);
+        break;
+    case KEY_DOWN:
+        if (snake_len(player) == 0 && !is_eq(player->facing, DIR_DOWN))
+        {
+            move_snake(player, DIR_DOWN);
+            break;
+        }
+        if (!is_eq(player->facing, DIR_UP) &&
+            !is_eq(player->facing, DIR_DOWN))
+            move_snake(player, DIR_DOWN);
+        break;
+    case 'Q':
+        // case 'q':
+        RUN = FALSE;
+        break;
+    case 'R':
+        reset_game(player);
+        break;
+    }
+}
+
 int main(int argc, char *argv[])
 {
     int ch; // For input.
     game_setup();
-    WINDOW *dbg_win = create_win(5, 20, 5, 5);
+    // WINDOW *dbg_win = create_win(5, 20, 5, 5);
 
     // Vec_t pos = {LINES / 2, COLS / 2};
-    Snake_t *player = new_snake(random_vec(), '#');
+    // Snake_t *player = new_snake(random_vec(), '#');
+    Vec_t pos = {POSY + 1, POSX + 1};
+    Snake_t *player = new_snake(pos, '#');
     draw_snake(player);
 
     APPLE = new_random_apple();
     draw_apple(APPLE);
 
+    // refresh();
     wrefresh(MAIN_WIN);
-    wrefresh(dbg_win);
+    // wrefresh(dbg_win);
 
     while (RUN)
     {
         // erase() seems to be faster?
-        // wclear(main_win);
-        werase(MAIN_WIN);
+        // wclear(MAIN_WIN);
+        // erase();
         // werase(dbg_win);
         // clear();
         // erase();
         ch = wgetch(MAIN_WIN);
+        werase(MAIN_WIN);
+        handle_input(player, ch);
         // ch = getch();
         move_snake(player, player->facing);
-
-        switch (ch)
-        {
-        case KEY_LEFT:
-            if (snake_len(player) == 0 && !is_eq(player->facing, DIR_LEFT))
-            {
-                move_snake(player, DIR_LEFT);
-                break;
-            }
-            if (!is_eq(player->facing, DIR_RIGHT) &&
-                !is_eq(player->facing, DIR_LEFT))
-                move_snake(player, DIR_LEFT);
-            break;
-        case KEY_RIGHT:
-            if (snake_len(player) == 0 && !is_eq(player->facing, DIR_RIGHT))
-            {
-                move_snake(player, DIR_RIGHT);
-                break;
-            }
-            if (!is_eq(player->facing, DIR_LEFT) &&
-                !is_eq(player->facing, DIR_RIGHT))
-                move_snake(player, DIR_RIGHT);
-            break;
-        case KEY_UP:
-            if (snake_len(player) == 0 && !is_eq(player->facing, DIR_UP))
-            {
-                move_snake(player, DIR_UP);
-                break;
-            }
-            if (!is_eq(player->facing, DIR_DOWN) &&
-                !is_eq(player->facing, DIR_UP))
-                move_snake(player, DIR_UP);
-            break;
-        case KEY_DOWN:
-            if (snake_len(player) == 0 && !is_eq(player->facing, DIR_DOWN))
-            {
-                move_snake(player, DIR_DOWN);
-                break;
-            }
-            if (!is_eq(player->facing, DIR_UP) &&
-                !is_eq(player->facing, DIR_DOWN))
-                move_snake(player, DIR_DOWN);
-            break;
-        case 'Q':
-            // case 'q':
-            RUN = FALSE;
-            break;
-        case 'R':
-            reset_game(player);
-            break;
-        }
+        wborder(MAIN_WIN, '|', '|', '-', '-', '+', '+', '+', '+');
 
         draw_snake(player);
 
@@ -186,9 +202,13 @@ int main(int argc, char *argv[])
 
         draw_apple(APPLE);
 
-        wrefresh(dbg_win);
+        // wrefresh(dbg_win);
+        mvwprintw(MAIN_WIN, 1, 1, "%i %i", player->head->pos.y, player->head->pos.x);
+        mvwprintw(MAIN_WIN, 2, 1, "%i %i", POSY, POSX);
+        mvwprintw(MAIN_WIN, 3, 1, "%i %i", MAXY, MAXX);
+        refresh();
         wrefresh(MAIN_WIN);
-        napms(50);
+        napms(100);
     }
 
     // clear();

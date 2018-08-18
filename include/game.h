@@ -21,6 +21,7 @@ typedef struct Apple Apple_t;
 Apple_t *APPLE;
 // The main window pointer.
 WINDOW *MAIN_WIN;
+int POSY, POSX, MAXY, MAXX;
 
 // Directions
 const Vec_t DIR_LEFT;
