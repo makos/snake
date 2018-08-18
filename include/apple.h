@@ -1,6 +1,6 @@
 #ifndef APPLE_H
 #define APPLE_H
-// Needs "game.h"
+// Needs "utils.h" "curses.h"
 typedef struct Vec Vec_t;
 typedef struct _win WINDOW;
 

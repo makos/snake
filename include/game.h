@@ -5,10 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-// Colors
-const short RED, GREEN, YELLOW;
-bool RUN;
-
+// Needs "utils.h" "apple.h" "player.h"
 typedef struct Vec Vec_t;
 typedef struct Snake Snake_t;
 typedef struct Apple Apple_t;
@@ -20,11 +17,16 @@ WINDOW *MAIN_WIN;
 // Main window's position and size.
 int POSY, POSX, MAXY, MAXX;
 
-// Directions
+// Directions.
 const Vec_t DIR_LEFT;
 const Vec_t DIR_UP;
 const Vec_t DIR_RIGHT;
 const Vec_t DIR_DOWN;
+
+// Colors.
+const short RED, GREEN, YELLOW;
+// Global is the game running? boolean.
+bool RUN;
 
 void reset_game(Snake_t *player);
 void game_over(Snake_t *player);
