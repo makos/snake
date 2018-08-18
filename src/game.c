@@ -16,7 +16,6 @@ bool RUN = TRUE;
 
 void reset_game(Snake_t *player)
 {
-    //FIXME: memory leak here; actually go over and free() all the parts.
     player->head->next = NULL;
     player->head->pos = random_vec(MAXY - 1, MAXX - 1);
     eat_apple(APPLE);
@@ -31,6 +30,8 @@ void reset_game(Snake_t *player)
 void game_over(Snake_t *player)
 {
     nodelay(MAIN_WIN, FALSE);
+    // Fixes memory leak? Not actually profiled yet.
+    clear_snake(player);
     char ch;
     int loop = TRUE;
     mvwprintw(MAIN_WIN, 1, 1, "Game Over");
