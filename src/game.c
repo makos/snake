@@ -25,11 +25,11 @@ void reset_game(Snake_t *player)
 
 void game_over(Snake_t *player)
 {
-    int mid_y = MAXY / 2;
+    // int mid_y = MAXY / 2;
     char ch;
     int loop = TRUE;
-    mvwprintw(MAIN_WIN, mid_y, 1, "Game Over");
-    mvwprintw(MAIN_WIN, mid_y + 1, 1, "Press Q to quit and R to restart");
+    mvwprintw(MAIN_WIN, 1, 1, "Game Over");
+    mvwprintw(MAIN_WIN, 2, 1, "Press Q to quit and R to restart");
     nodelay(MAIN_WIN, FALSE);
 
     while (loop)
@@ -77,7 +77,7 @@ void game_setup()
     {
         start_color();
     }
-    nodelay(MAIN_WIN, TRUE);
+    // nodelay(MAIN_WIN, TRUE);
     curs_set(0);
     setup_colors();
 
@@ -154,7 +154,11 @@ int main(int argc, char *argv[])
     APPLE = new_random_apple();
     draw_apple(APPLE);
 
+    nodelay(MAIN_WIN, FALSE);
+    mvwprintw(MAIN_WIN, 1, 1, "Press any key to start...");
     wrefresh(MAIN_WIN);
+    wgetch(MAIN_WIN);
+    nodelay(MAIN_WIN, TRUE);
     //DEBUG:
     wrefresh(dbg_win);
 
