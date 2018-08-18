@@ -14,6 +14,10 @@ Vec_t random_vec(int maxy, int maxx)
     srand((time(&tt) * 377) % 23);
     int rand_y = rand() % maxy;
     int rand_x = rand() % maxx;
+    if (rand_y == 0)
+        rand_y++;
+    if (rand_x == 0)
+        rand_x++;
     Vec_t vec = {rand_y, rand_x};
     return vec;
 }

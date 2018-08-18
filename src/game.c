@@ -123,44 +123,16 @@ void handle_input(Snake_t *player, int ch)
     switch (ch)
     {
     case KEY_LEFT:
-        if (snake_len(player) == 0 && !is_eq(player->facing, DIR_LEFT))
-        {
-            move_snake(player, DIR_LEFT);
-            break;
-        }
-        if (!is_eq(player->facing, DIR_RIGHT) &&
-            !is_eq(player->facing, DIR_LEFT))
-            move_snake(player, DIR_LEFT);
+        check_valid_move(player, DIR_LEFT);
         break;
     case KEY_RIGHT:
-        if (snake_len(player) == 0 && !is_eq(player->facing, DIR_RIGHT))
-        {
-            move_snake(player, DIR_RIGHT);
-            break;
-        }
-        if (!is_eq(player->facing, DIR_LEFT) &&
-            !is_eq(player->facing, DIR_RIGHT))
-            move_snake(player, DIR_RIGHT);
+        check_valid_move(player, DIR_RIGHT);
         break;
     case KEY_UP:
-        if (snake_len(player) == 0 && !is_eq(player->facing, DIR_UP))
-        {
-            move_snake(player, DIR_UP);
-            break;
-        }
-        if (!is_eq(player->facing, DIR_DOWN) &&
-            !is_eq(player->facing, DIR_UP))
-            move_snake(player, DIR_UP);
+        check_valid_move(player, DIR_UP);
         break;
     case KEY_DOWN:
-        if (snake_len(player) == 0 && !is_eq(player->facing, DIR_DOWN))
-        {
-            move_snake(player, DIR_DOWN);
-            break;
-        }
-        if (!is_eq(player->facing, DIR_UP) &&
-            !is_eq(player->facing, DIR_DOWN))
-            move_snake(player, DIR_DOWN);
+        check_valid_move(player, DIR_DOWN);
         break;
     case 'Q':
         RUN = FALSE;
@@ -177,10 +149,7 @@ int main(int argc, char *argv[])
     game_setup();
     WINDOW *dbg_win = newwin(5, 20, 5, 30);
 
-    // Vec_t pos = {LINES / 2, COLS / 2};
     Snake_t *player = new_snake(random_vec(MAXY - 1, MAXX - 1), '#');
-    // Vec_t pos = {POSY + 1, POSX + 1};
-    // Snake_t *player = new_snake(pos, '#');
     draw_snake(player);
 
     APPLE = new_random_apple();
