@@ -81,6 +81,7 @@ void game_setup()
     setup_colors();
 }
 
+//DEBUG:
 void debug_info(WINDOW *win, Snake_t *player)
 {
     mvwprintw(win, 0, 0, "Pos:%i %i", player->head->pos.y, player->head->pos.x);
@@ -129,6 +130,8 @@ void handle_input(Snake_t *player, int ch)
         reset_game(player);
         break;
     default:
+        // When no input is given, move the snake one cell per frame in
+        // the direction it's facing.
         move_snake(player, player->facing);
     }
 }
@@ -137,6 +140,7 @@ int main(int argc, char *argv[])
 {
     int ch; // For input.
     game_setup();
+    //DEBUG: remove later
     WINDOW *dbg_win = newwin(5, 20, 5, 30);
 
     Snake_t *player = new_snake(random_vec(MAXY - 1, MAXX - 1), '#');
@@ -146,6 +150,7 @@ int main(int argc, char *argv[])
     draw_apple(APPLE);
 
     wrefresh(MAIN_WIN);
+    //DEBUG:
     wrefresh(dbg_win);
 
     while (RUN)
@@ -153,10 +158,12 @@ int main(int argc, char *argv[])
         ch = wgetch(MAIN_WIN);
 
         werase(MAIN_WIN);
+        //DEBUG:
         werase(dbg_win);
 
         handle_input(player, ch);
 
+        // Check if player has collided with the apple.
         if (is_eq(player->head->pos, APPLE->pos))
         {
             eat_apple(APPLE);
@@ -170,9 +177,11 @@ int main(int argc, char *argv[])
 
         draw_apple(APPLE);
 
+        //DEBUG:
         debug_info(dbg_win, player);
 
         wrefresh(MAIN_WIN);
+        //DEBUG:
         wrefresh(dbg_win);
 
         napms(100);
