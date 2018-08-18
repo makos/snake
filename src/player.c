@@ -21,10 +21,6 @@ Snake_t *new_snake(Vec_t pos, int ch)
 
 void move_snake(Snake_t *self, Vec_t dir)
 {
-    // Don't add extra velocity when player holds the button while
-    // moving in one direction.
-    // if (is_eq(dir, self->facing))
-    // return;
     // Change facing direction accordingly.
     if (is_eq(dir, DIR_UP))
         self->facing = DIR_UP;
@@ -51,9 +47,7 @@ void move_snake(Snake_t *self, Vec_t dir)
         }
     }
 
-    // Stop at the edges
-    // if (new_pos.y < 0 || new_pos.y >= LINES ||
-    //     new_pos.x < 0 || new_pos.x >= COLS)
+    // Stop at the edges. 1 and -1 because of borders.
     if (new_pos.y < 1 || new_pos.y >= MAXY - 1 ||
         new_pos.x < 1 || new_pos.x >= MAXX - 1)
     {
@@ -63,6 +57,7 @@ void move_snake(Snake_t *self, Vec_t dir)
 
     // "Caterpillar-like" movement behavior (peristaltic).
     SnakePart_t *last = get_last(self);
+    // if (self->head->next != NULL)
     push_part(self);
     delete_part(last);
     self->head->pos = new_pos;
