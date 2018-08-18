@@ -19,7 +19,7 @@ void reset_game(Snake_t *player)
     player->head->next = NULL;
     player->head->pos = random_vec(MAXY - 1, MAXX - 1);
     eat_apple(APPLE);
-    APPLE = new_random_apple();
+    APPLE = new_random_apple(player);
     wclear(MAIN_WIN);
     draw_snake(player);
     draw_apple(APPLE);
@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
     draw_snake(player);
 
     // Initialize the first apple.
-    APPLE = new_random_apple();
+    APPLE = new_random_apple(player);
     draw_apple(APPLE);
 
     new_game_prompt();
@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
         if (dir_is_eq(player->head->pos, APPLE->pos))
         {
             eat_apple(APPLE);
-            APPLE = new_random_apple();
+            APPLE = new_random_apple(player);
             add_score(player);
         }
 

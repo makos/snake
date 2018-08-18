@@ -6,13 +6,29 @@
  */
 #include "utils.h"
 #include "game.h"
+#include "player.h"
 #include "apple.h"
 
 // Spawn a new apple at a random position.
-Apple_t *new_random_apple()
+Apple_t *new_random_apple(Snake_t *player)
 {
     Apple_t *apple = (Apple_t *)malloc(sizeof(Apple_t));
-    apple->pos = random_vec(MAXY - 1, MAXX - 1);
+    Vec_t pos = random_vec(MAXY - 1, MAXX - 1);
+
+    // If we tried to spawn an apple on the snake, try again.
+    if (dir_is_eq(player->head->pos, pos))
+        pos = random_vec(MAXY - 1, MAXX - 1);
+    else
+    {
+        SnakePart_t *current = player->head;
+        while (current->next != NULL)
+        {
+            if (dir_is_eq(current->pos, pos))
+                pos = random_vec(MAXY - 1, MAXX - 1);
+            current = current->next;
+        }
+    }
+    apple->pos = pos;
     apple->ch = '@';
     return apple;
 }
