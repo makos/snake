@@ -16,6 +16,7 @@ bool RUN = TRUE;
 
 void reset_game(Snake_t *player)
 {
+    //FIXME: memory leak here; actually go over and free() all the parts.
     player->head->next = NULL;
     player->head->pos = random_vec(MAXY - 1, MAXX - 1);
     eat_apple(APPLE);
@@ -37,8 +38,8 @@ void game_over(Snake_t *player)
         switch (ch)
         {
         case 'Q':
-            loop = FALSE;
-            RUN = FALSE;
+            endwin();
+            exit(0);
             break;
         case 'R':
             loop = FALSE;
