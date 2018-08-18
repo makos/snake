@@ -25,7 +25,6 @@ void reset_game(Snake_t *player)
 
 void game_over(Snake_t *player)
 {
-    // int mid_y = MAXY / 2;
     char ch;
     int loop = TRUE;
     mvwprintw(MAIN_WIN, 1, 1, "Game Over");
@@ -77,7 +76,6 @@ void game_setup()
     {
         start_color();
     }
-    // nodelay(MAIN_WIN, TRUE);
     curs_set(0);
     setup_colors();
 
@@ -141,6 +139,15 @@ void handle_input(Snake_t *player, int ch)
     }
 }
 
+void new_game_prompt()
+{
+    nodelay(MAIN_WIN, FALSE);
+    mvwprintw(MAIN_WIN, 1, 1, "Press any key to start...");
+    wrefresh(MAIN_WIN);
+    wgetch(MAIN_WIN);
+    nodelay(MAIN_WIN, TRUE);
+}
+
 int main(int argc, char *argv[])
 {
     int ch; // For input.
@@ -148,17 +155,15 @@ int main(int argc, char *argv[])
     //DEBUG: remove later
     WINDOW *dbg_win = newwin(5, 20, 5, 30);
 
+    // Initialize the player.
     Snake_t *player = new_snake(random_vec(MAXY - 1, MAXX - 1), '#');
     draw_snake(player);
 
+    // Initialize the first apple.
     APPLE = new_random_apple();
     draw_apple(APPLE);
 
-    nodelay(MAIN_WIN, FALSE);
-    mvwprintw(MAIN_WIN, 1, 1, "Press any key to start...");
-    wrefresh(MAIN_WIN);
-    wgetch(MAIN_WIN);
-    nodelay(MAIN_WIN, TRUE);
+    new_game_prompt();
     //DEBUG:
     wrefresh(dbg_win);
 
