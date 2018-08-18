@@ -15,13 +15,20 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 _OBJ = game.o player.o apple.o utils.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-LIBS=-l:pdcurses.a
-
+ifeq ($(OS),Windows_NT)
+	LIBS=-l:pdcurses.a
+else
+	LIBS=-lncurses
+endif
 # Binary name
 BIN=snake
-
+ifeq ($(OS),Windows_NT)
+	EXT=.exe
+else
+	EXT=
+endif
 # Default (debug, non-optimized) build
-snake: $(OBJ)
+all: $(OBJ)
 	mkdir -p $(OUTDIRDBG)
 	$(CC) -o $(OUTDIRDBG)/$(BIN) $^ $(CFLAGS) $(LIBS)
 
@@ -36,10 +43,10 @@ release: $(OBJ)
 
 .PHONY: clean run run_release
 clean: 
-	rm -rf $(OUTDIRDBG)/*.exe $(OUTDIRREL)/*.exe $(ODIR)/*.o
+	rm -rf $(OUTDIRDBG)/* $(OUTDIRREL)/* $(ODIR)/*.o
 
 run:
-	$(OUTDIRDBG)/$(BIN).exe
+	$(OUTDIRDBG)/$(BIN)$(EXT)
 
 run_release:
-	$(OUTDIRREL)/$(BIN).exe
+	$(OUTDIRREL)/$(BIN)$(EXT)
