@@ -19,9 +19,9 @@ Apple_t *new_random_apple()
 
 void draw_apple(Apple_t *self)
 {
-    attron(COLOR_PAIR(RED));
-    mvprintw(self->pos.y, self->pos.x, (char *)&self->ch);
-    attroff(COLOR_PAIR(RED));
+    wattron(MAIN_WIN, COLOR_PAIR(RED));
+    mvwprintw(MAIN_WIN, self->pos.y, self->pos.x, (char *)&self->ch);
+    wattroff(MAIN_WIN, COLOR_PAIR(RED));
 }
 
 void eat_apple(Apple_t *self)

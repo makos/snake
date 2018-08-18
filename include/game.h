@@ -19,6 +19,8 @@ typedef struct Apple Apple_t;
 
 // The current apple being drawn.
 Apple_t *APPLE;
+// The main window pointer.
+WINDOW *MAIN_WIN;
 
 // Directions
 const Vec_t DIR_LEFT;

@@ -74,15 +74,15 @@ void draw_snake(Snake_t *self)
         // Draw the head in different color.
         if (current->prev == NULL)
         {
-            attron(COLOR_PAIR(YELLOW));
-            mvprintw(current->pos.y, current->pos.x, (char *)&self->ch);
-            attroff(COLOR_PAIR(YELLOW));
+            wattron(MAIN_WIN, COLOR_PAIR(YELLOW));
+            mvwprintw(MAIN_WIN, current->pos.y, current->pos.x, (char *)&self->ch);
+            wattroff(MAIN_WIN, COLOR_PAIR(YELLOW));
         }
         else
         {
-            attron(COLOR_PAIR(GREEN));
-            mvprintw(current->pos.y, current->pos.x, (char *)&self->ch);
-            attroff(COLOR_PAIR(GREEN));
+            wattron(MAIN_WIN, COLOR_PAIR(GREEN));
+            mvwprintw(MAIN_WIN, current->pos.y, current->pos.x, (char *)&self->ch);
+            wattroff(MAIN_WIN, COLOR_PAIR(GREEN));
         }
         current = current->next;
     }

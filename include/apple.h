@@ -2,6 +2,7 @@
 #define APPLE_H
 // Needs "game.h"
 typedef struct Vec Vec_t;
+typedef struct _win WINDOW;
 
 typedef struct Apple
 {

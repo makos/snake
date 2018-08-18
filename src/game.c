@@ -14,18 +14,19 @@ const Vec_t DIR_DOWN = {1, 0};
 
 bool RUN = TRUE;
 Apple_t *APPLE;
+WINDOW *MAIN_WIN;
 
 // Creating a new window segfaults, WHY??
-// WINDOW *create_win(int height, int width, int starty, int startx)
-// {
-//     WINDOW *local;
-//     local = newwin(height, width, starty, startx);
-//     // local = subwin(stdscr, height, width, starty, startx);
-//     box(local, 0, 0);
-//     // wnoutrefresh(local);
-//     wrefresh(local);
-//     return local;
-// }
+WINDOW *create_win(int height, int width, int starty, int startx)
+{
+    WINDOW *local;
+    local = newwin(height, width, starty, startx);
+    // local = subwin(stdscr, height, width, starty, startx);
+    box(local, 0, 0);
+    // wnoutrefresh(local);
+    wrefresh(local);
+    return local;
+}
 
 void reset_game(Snake_t *player)
 {
@@ -38,27 +39,27 @@ void reset_game(Snake_t *player)
 
 void game_over(Snake_t *player)
 {
-    int mid = LINES / 2;
+    int mid_y = LINES / 2;
     char ch;
     int loop = TRUE;
-    mvprintw(mid, COLS / 2, "Game Over");
-    mvprintw(mid + 1, COLS / 2, "Press Q to quit and R to restart");
-    nodelay(stdscr, FALSE);
+    mvwprintw(MAIN_WIN, mid_y, COLS / 2, "Game Over");
+    mvwprintw(MAIN_WIN, mid_y + 1, COLS / 2, "Press Q to quit and R to restart");
+    nodelay(MAIN_WIN, FALSE);
 
     while (loop)
     {
-        ch = getch();
+        ch = wgetch(MAIN_WIN);
         switch (ch)
         {
-        case 'q':
+        // case 'q':
         case 'Q':
             loop = FALSE;
             RUN = FALSE;
             break;
-        case 'r':
+        // case 'r':
         case 'R':
             loop = FALSE;
-            nodelay(stdscr, TRUE);
+            nodelay(MAIN_WIN, TRUE);
             reset_game(player);
             break;
         }
@@ -76,22 +77,30 @@ void game_setup()
 {
     // Curses initializaiton & setup.
     initscr();
+    MAIN_WIN = newwin(5, 100, 0, 0);
     cbreak();
     noecho();
-    keypad(stdscr, TRUE);
+    keypad(MAIN_WIN, TRUE);
     if (has_colors())
     {
         start_color();
     }
-    nodelay(stdscr, TRUE);
+    nodelay(MAIN_WIN, TRUE);
     curs_set(0);
+    box(MAIN_WIN, 0, 0);
     setup_colors();
+}
+
+void debug_info(WINDOW *win, Snake_t *player)
+{
+    mvwprintw(win, 1, 1, "test");
 }
 
 int main(int argc, char *argv[])
 {
     int ch; // For input.
     game_setup();
+    WINDOW *dbg_win = create_win(5, 20, 5, 5);
 
     // Vec_t pos = {LINES / 2, COLS / 2};
     Snake_t *player = new_snake(random_vec(), '#');
@@ -100,14 +109,19 @@ int main(int argc, char *argv[])
     APPLE = new_random_apple();
     draw_apple(APPLE);
 
-    refresh();
+    wrefresh(MAIN_WIN);
+    wrefresh(dbg_win);
 
     while (RUN)
     {
         // erase() seems to be faster?
+        // wclear(main_win);
+        werase(MAIN_WIN);
+        // werase(dbg_win);
         // clear();
-        erase();
-        ch = getch();
+        // erase();
+        ch = wgetch(MAIN_WIN);
+        // ch = getch();
         move_snake(player, player->facing);
 
         switch (ch)
@@ -172,11 +186,12 @@ int main(int argc, char *argv[])
 
         draw_apple(APPLE);
 
-        refresh();
+        wrefresh(dbg_win);
+        wrefresh(MAIN_WIN);
         napms(50);
     }
 
-    clear();
+    // clear();
     endwin();
     return 0;
 }
