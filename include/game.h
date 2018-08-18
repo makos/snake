@@ -14,15 +14,19 @@ typedef struct Vec
     int y, x;
 } Vec_t;
 
+typedef struct Snake Snake_t;
+typedef struct Apple Apple_t;
+
+// The current apple being drawn.
+Apple_t *APPLE;
+
 // Directions
 const Vec_t DIR_LEFT;
 const Vec_t DIR_UP;
 const Vec_t DIR_RIGHT;
 const Vec_t DIR_DOWN;
 
-// void setup_colors();
-// void game_setup();
-// void show_debug_info();
-// int main(int argc, char *argv[]);
+void reset_game(Snake_t *player);
+void game_over(Snake_t *player);
 
 #endif //GAME_H

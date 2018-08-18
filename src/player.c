@@ -1,5 +1,6 @@
 #include "game.h"
 #include "player.h"
+#include "utils.h"
 
 /* Allocate memory for a new snake.
    Snakes always have a head that connects to the tail */
@@ -20,19 +21,37 @@ Snake_t *new_snake(Vec_t pos, int ch)
 
 void move_snake(Snake_t *self, Vec_t dir)
 {
-    if (dir.y == -1)
+    // Don't add extra velocity when player holds the button while
+    // moving in one direction.
+    // if (is_eq(dir, self->facing))
+    // return;
+    // Change facing direction accordingly.
+    if (is_eq(dir, DIR_UP))
         self->facing = DIR_UP;
-    else if (dir.x == 1)
+    else if (is_eq(dir, DIR_RIGHT))
         self->facing = DIR_RIGHT;
-    else if (dir.y == 1)
+    else if (is_eq(dir, DIR_DOWN))
         self->facing = DIR_DOWN;
-    else if (dir.x == -1)
+    else if (is_eq(dir, DIR_LEFT))
         self->facing = DIR_LEFT;
 
     Vec_t new_pos = {
         self->head->pos.y + dir.y,
         self->head->pos.x + dir.x};
 
+    // Check for collisions with the tail.
+    if (self->head->next != NULL)
+    {
+        SnakePart_t *current = self->head->next;
+        while (current->next != NULL)
+        {
+            if (is_eq(self->head->pos, current->pos))
+                game_over(self);
+            current = current->next;
+        }
+    }
+
+    // Stop at the edges
     if (new_pos.y < 0 || new_pos.y >= LINES ||
         new_pos.x < 0 || new_pos.x >= COLS)
     {
@@ -40,6 +59,7 @@ void move_snake(Snake_t *self, Vec_t dir)
         new_pos.x = self->head->pos.x;
     }
 
+    // "Caterpillar-like" movement behavior (peristaltic).
     SnakePart_t *last = get_last(self);
     push_part(self);
     delete_part(last);
@@ -51,6 +71,7 @@ void draw_snake(Snake_t *self)
     SnakePart_t *current = self->head;
     while (current != NULL)
     {
+        // Draw the head in different color.
         if (current->prev == NULL)
         {
             attron(COLOR_PAIR(YELLOW));
