@@ -14,6 +14,8 @@ const Vec_t DIR_DOWN = {1, 0};
 
 bool RUN = TRUE;
 
+const char *VERSION = "1.0.0";
+
 void reset_game(Snake_t *player)
 {
     player->head->next = NULL;
@@ -168,6 +170,11 @@ void set_defaults()
 
 void parse_args(int argc, char *argv[])
 {
+    if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)
+        show_help(argv[0]);
+    else if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0)
+        show_version();
+
     int num = atoi(argv[1]);
     if (num != 0)
     {
@@ -177,6 +184,28 @@ void parse_args(int argc, char *argv[])
     {
         set_defaults();
     }
+}
+
+void show_help(char *prog_name)
+{
+    printf("Snake - eat apples and don't bump into yourself.");
+    printf("\nAvailable options and usage:");
+    printf("\n%s [OPTIONS] [switches]", prog_name);
+    printf("\nOptions:");
+    printf("\n\t<integer> (i.e. 200) - set game speed, higher is slower; default = 125");
+    printf("\nSwitches:");
+    printf("\n\t-h --help - this text");
+    printf("\n\t-v --version - version information");
+    printf("\n\n(c) 2018 Mateusz Makowski; See LICENSE for details.\n");
+    exit(0);
+}
+
+void show_version()
+{
+    printf("\nSnake v%s (c) Mateusz Makowski; Licensed under the MIT license, \
+see LICENSE for details.\n",
+           VERSION);
+    exit(0);
 }
 
 int main(int argc, char *argv[])

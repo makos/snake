@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
+#include <string.h>
 
 // Needs "utils.h" "apple.h" "player.h"
 typedef struct Vec Vec_t;
@@ -17,6 +18,8 @@ Apple_t *APPLE;
 WINDOW *MAIN_WIN;
 // Main window's position and size.
 int POSY, POSX, MAXY, MAXX;
+
+const char *VERSION;
 
 // Directions.
 const Vec_t DIR_LEFT;
@@ -42,5 +45,7 @@ void check_valid_move(Snake_t *player, Vec_t dir);
 void handle_input(Snake_t *player, int ch);
 void set_defaults();
 void parse_args(int argc, char *argv[]);
+void show_help();
+void show_version();
 
 #endif //GAME_H
