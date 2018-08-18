@@ -159,3 +159,16 @@ int snake_len(Snake_t *self)
     }
     return count;
 }
+
+void clear_snake(Snake_t *self)
+{
+    SnakePart_t *last = get_last(self);
+    if (last->prev == NULL)
+        return;
+    while (last->prev != NULL)
+    {
+        last = last->prev;
+        free(last->next);
+        last->next = NULL;
+    }
+}

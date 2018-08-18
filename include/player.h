@@ -24,10 +24,10 @@ int snake_len(Snake_t *self);
 void move_snake(Snake_t *self, Vec_t dir);
 void draw_snake(Snake_t *self);
 void add_score(Snake_t *self);
-
 void delete_part(SnakePart_t *part);
 void append_part(Snake_t *self);
 void push_part(Snake_t *self);
 SnakePart_t *get_last(Snake_t *snake);
+void clear_snake(Snake_t *self);
 
 #endif //PLAYER_H
