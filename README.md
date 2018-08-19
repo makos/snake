@@ -2,7 +2,9 @@
 The classic game we all know and love.
 
 ## Requirements
-The game is made and tested on Windows 10 with PDCurses and MinGW-w64, but since PDCurses is compatible with native ncurses it should compile on Linux. Not tested (yet).
+The game is made and tested on Windows 10 with PDCurses and MinGW-w64. Tested
+on Windows 10 with `cmd.exe`, `Cygwin` and Git for Windows' `bash.exe`. Tested
+to be working on Arch Linux VM. 
 
 Required libraries:
 * ncurses (PDCurses)
@@ -19,7 +21,7 @@ Pre-compiled binaries are planned. For now you have to compile from source (whic
 ````
 git clone https://github.com/makos/snake.git
 cd snake
-make release && make run_release
+make && make run
 ````
 
 The executables are in `target/debug` or `target/release` subdirectories.
