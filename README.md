@@ -1,6 +1,8 @@
 # Snake
 The classic game we all know and love.
 
+[![asciicast](https://asciinema.org/a/197056.png)](https://asciinema.org/a/197056)
+
 ## Requirements
 The game is made and tested on Windows 10 with PDCurses and MinGW-w64. Tested
 on Windows 10 with `cmd.exe`, `Cygwin` and Git for Windows' `bash.exe`. Tested
