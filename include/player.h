@@ -3,7 +3,14 @@
 // Needs "game.h" "curses.h"
 typedef struct Vec Vec_t;
 typedef struct SnakePart SnakePart_t;
+
+#ifdef _WIN32
 typedef struct _win WINDOW;
+#endif
+
+#ifdef _gnu_linux_
+typedef struct _win_st WINDOW;
+#endif
 
 typedef struct SnakePart
 {
