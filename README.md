@@ -12,9 +12,11 @@ Required libraries:
 * ncurses (PDCurses)
 
 Other requirements:
-* GNU Make and GCC (for building)
-* a terminal emulator (even `cmd.exe` will do)
-* arrow keys
+* For building:
+    * GNU Make and GCC, preferably with bash or other shell (just not `cmd.exe`)
+* For playing:
+    * a terminal emulator 
+    * arrow keys
 
 ## Building
 
@@ -43,3 +45,4 @@ Will run with game speed set to `100`. It is basically the amount of millisecond
 
 ## Copyright
 Licensed under MIT (Expat) license. This program is free software.
+&copy; 2018 Mateusz Makowski
